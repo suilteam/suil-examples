@@ -1,5 +1,5 @@
-#include <suil/utils.h>
-#include <suil/cmdl.hpp>
+#include <suil/cmdl.h>
+#include <suil/init.h>
 #include <suil/http/endpoint.h>
 #include <suil/http/wsock.h>
 
@@ -16,13 +16,13 @@ int main(int argc, char *argv[])
                         opt(port, 1080));
 
     struct User {
-        zcstring id;
-        zcstring username;
+        String id;
+        String username;
     };
 
     typedef decltype(iod::D(
-        prop(username,  zcstring),
-        prop(data,      zcstring)
+        prop(username,  String),
+        prop(data,      String)
     )) HistoryEntry;
 
     std::deque<std::string> history;
@@ -51,10 +51,10 @@ int main(int argc, char *argv[])
             return true;
         },
 
-        var(onMessage) = [&](http::WebSock& ws, const zbuffer& data, http::WsOp) {
+        var(onMessage) = [&](http::WebSock& ws, const OBuffer& data, http::WsOp) {
             // prepare message
             auto user = ws.data<User>();
-            zcstring msg = zcstring{data.data(), data.size(), false};
+            String msg = String{data.data(), data.size(), false};
             HistoryEntry he{user->username.peek(), msg};
             auto entry = json::encode(he);
             // send message to other connected clients
@@ -80,7 +80,7 @@ int main(int argc, char *argv[])
         http::ws_handshake<User>(req, resp, wsApi, [username](http::WebSock& ws) {
             // configure the websocket user
             auto user = ws.data<User>();
-            user->username = zcstring(username).dup();
+            user->username = String(username).dup();
         });
     });
 

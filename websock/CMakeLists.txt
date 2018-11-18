@@ -12,7 +12,7 @@ set(websock_VERSION        0.0.0 CACHE STRING     "Current application version")
 
 set(websock_DEFINES
         "-DAPI_VERSION=\"${websock_VERSION}\""
-        "-DCHAT_HTML=\"${CMAKE_CURRENT_SOURCE_DIR}/res/chat.html\"")
+        "-DCHAT_HTML=\"res/www/chat.html\"")
 
 SuilProject(websock)
 

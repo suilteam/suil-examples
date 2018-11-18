@@ -23,5 +23,8 @@ SuilApp(basic
         VERSION       ${basic_VERSION}
         DEFINES       ${basic_DEFINES}
         INSTALL       ON
-        INSTALL_FILES ../examples.conf.lua
         INSTALL_DIRS  res)
+
+# always copy resources to binary directory
+message(STATUS "Copy to ${CMAKE_CURRENT_BINARY_DIR}")
+file(COPY res DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/res)

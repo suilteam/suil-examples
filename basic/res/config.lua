@@ -4,17 +4,14 @@
 
 -- sample configuration file
 config = {
-    basic = {
+    -- logging verbosity
+    verbosity = 2,
+    -- number of process to launch
+    nprocs    = 2,
+    -- http configuration
+    http = {
         host      = "0.0.0.0",
-        port      = 1089,
-        verbosity = 2,
-        nprocs    = 2
-    },
-
-    process = {
-    },
-
-    websock = {
+        port      = 1089
     }
 }
 

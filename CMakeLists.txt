@@ -7,7 +7,3 @@ set(SUIL_BASE_PATH "" CACHE STRING "Path to an install of suil package")
 add_subdirectory(basic)
 add_subdirectory(websock)
 add_subdirectory(process)
-
-# copy for confiuration purposes
-file(COPY examples.conf.lua
-     DESTINATION ${CMAKE_CURRENT_BINARY_DIR})

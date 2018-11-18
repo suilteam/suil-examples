@@ -1,25 +1,58 @@
 #include <suil/init.h>
-#include <suil/cmdl.hpp>
+#include <suil/cmdl.h>
 #include <suil/config.h>
 #include <suil/http/endpoint.h>
 #include <suil/http/fserver.h>
 
 using namespace suil;
 
+static int runServer(String&& config);
+
+static void cmd_Run(cmdl::Parser& parser) {
+    // run command
+    cmdl::Cmd run{"run", "start running basic example"};
+    run << cmdl::Arg{"config", "the configuration file to use with the example",
+                     'C', false, false};
+    run([](cmdl::Cmd& cmd){
+        // hand run command
+        String config = cmd.getvalue<String>("config", "res/config.lua").dup();
+        runServer(std::move(config));
+    });
+    parser.add(std::move(run));
+}
+
 int main(int argc, char *argv[])
 {
-    auto config = Config::load("../examples.conf.lua");
+    cmdl::Parser parser(APP_NAME, APP_VERSION, "suil library example demonstrating basic REST functionality");
+    try {
+        // add commands and run
+        cmd_Run(parser);
+        parser.parse(argc, argv);
+        parser.handle();
+
+        return EXIT_SUCCESS;
+    }
+    catch(...) {
+        // unhandled Exception
+        serror("unhandled error %s", Exception::fromCurrent().what());
+        return EXIT_FAILURE;
+    }
+}
+
+int runServer(String&& configFile)
+{
+    auto config = Config::load(configFile());
     sinfo("GUID: %s", utils::uuidstr()());
     suil::init(opt(printinfo, false));
-    log::setup(opt(verbose, config.get("config.basic.verbosity", 0)));
+    log::setup(opt(verbose, config.get("config.verbosity", 1)));
     // create a new HTTP endpoint listening on port 80
     http::TcpEndpoint<http::SystemAttrs> ep("/api",
-            opt(name, config.get("config.basic.host", std::string("0.0.0.0"))),
-            opt(port, config.get("config.basic.port", 1080)),
+            opt(name, config.get("config.http.host", std::string("0.0.0.0"))),
+            opt(port, config.get("config.http.port", 1080)),
             opt(accept_backlog, 1000));
 
     http::FileServer fs(ep,
-        opt(root, "/home/dc/Downloads"),
+        opt(root, config.get("config.httt.fs.base", String{"res/www"})),
         opt(enable_send_file, true));
 
     // accessed via http://0.0.0.0:1080/api/hello
@@ -151,7 +184,7 @@ int main(int argc, char *argv[])
 
     // we need to listen before creating workers
     ep.listen();
-    int nprocs = config.get("config.basic.nprocs", 1);
+    int nprocs = config.get("config.nprocs", 1);
     sinfo("starting server with %d procs", nprocs);
     for (int i = 0; i < nprocs-1; ++i) {
         pid_t pid = mfork();

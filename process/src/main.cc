@@ -1,6 +1,7 @@
-#include <suil/utils.h>
-#include <suil/cmdl.hpp>
+#include <suil/cmdl.h>
+#include <suil/init.h>
 #include <suil/process.h>
+#include <suil/utils.h>
 
 using namespace suil;
 
@@ -12,12 +13,12 @@ int main(int argc, char *argv[])
     auto  proc2 = Process::bash("tail", "-f", "/var/log/syslog", "1>&2");
 
     proc->readAsync(var(onStdOutput) =
-        [&](zcstring &&output) {
+        [&](String &&output) {
             swarn("{--1--} %s", output());
             return true;
         }
     );
-    proc2->readAsync(var(onStdError) = [&](zcstring&& err) {
+    proc2->readAsync(var(onStdError) = [&](String&& err) {
         serror("{--2--} %s", err());
         return true;
     });
