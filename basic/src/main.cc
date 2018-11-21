@@ -46,14 +46,10 @@ int runServer(String&& configFile)
     suil::init(opt(printinfo, false));
     log::setup(opt(verbose, config.get("config.verbosity", 1)));
     // create a new HTTP endpoint listening on port 80
-    http::TcpEndpoint<http::SystemAttrs> ep("/api",
+    http::TcpEndpoint<http::SystemAttrs> ep("/",
             opt(name, config.get("config.http.host", std::string("0.0.0.0"))),
             opt(port, config.get("config.http.port", 1080)),
             opt(accept_backlog, 1000));
-
-    http::FileServer fs(ep,
-        opt(root, config.get("config.httt.fs.base", String{"res/www"})),
-        opt(enable_send_file, true));
 
     // accessed via http://0.0.0.0:1080/api/hello
     ep("/hello")
