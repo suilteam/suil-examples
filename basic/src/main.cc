@@ -15,7 +15,7 @@ static void cmd_Run(cmdl::Parser& parser) {
                      'C', false, false};
     run([](cmdl::Cmd& cmd){
         // hand run command
-        String config = cmd.getvalue<String>("config", "res/config.lua").dup();
+        String config = cmd.getvalue<String>("config", "res/app.lua").dup();
         runServer(std::move(config));
     });
     parser.add(std::move(run));
