@@ -18,7 +18,7 @@ if (SUIL_BUILD_DEV_PACKAGE)
 endif()
 
 SuilProject(jsonrpc
-        SCC_BIN  ${CMAKE_BINARY_DIR}/tools/scc)
+        SCC_BIN  ${_SCC_BIN})
 
 set(jsonrpc_SOURCES
         src/main.cc
