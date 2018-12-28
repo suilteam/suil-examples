@@ -1,0 +1,19 @@
+#include <suil/rpc/jsonrpc.h>
+#include <suil/rpc/suilrpc.h>
+
+namespace suil {
+
+    meta User {
+        String name;
+        int    age;
+    };
+
+    service [[rpc]] DemoService {
+
+        int add(int a, int b);
+
+        void setUser(const User&& usr);
+
+        User getUser();
+    } ;
+}

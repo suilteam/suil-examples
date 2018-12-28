@@ -86,3 +86,6 @@ apps
 
 # Ignore protobuf files
 *.pb.*
+
+# Ignore scc files
+*.scc.*
