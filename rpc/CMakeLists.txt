@@ -13,6 +13,10 @@ set(jsonrpc_VERSION        0.0.0 CACHE STRING     "Current application version")
 set(jsonrpc_DEFINES
         "-DAPI_VERSION=\"${jsonrpc_VERSION}\"")
 
+if (SUIL_BUILD_DEV_PACKAGE)
+    set(_SCC_BIN ${CMAKE_BINARY_DIR}/tools/scc)
+endif()
+
 SuilProject(jsonrpc
         SCC_BIN  ${CMAKE_BINARY_DIR}/tools/scc)
 
