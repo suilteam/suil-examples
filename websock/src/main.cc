@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
     );
 
     // add an http route on which web sockets will connect
-    ep("/chat/<string>")
+    ep("/chat/{string}")
     ("GET"_method)
     ([&](const http::Request& req, http::Response& resp, std::string username) {
         // start the websocket handshake

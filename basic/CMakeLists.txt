@@ -27,4 +27,4 @@ SuilApp(basic
 
 # always copy resources to binary directory
 message(STATUS "Copy to ${CMAKE_CURRENT_BINARY_DIR}")
-file(COPY res DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/res)
+file(COPY res DESTINATION ${CMAKE_CURRENT_BINARY_DIR})

@@ -18,14 +18,16 @@ void startClient(Client& client)
     client.connect("127.0.0.1", 4243);
     msleep(utils::after(2000));
     auto start = mnow();
-    int count{100000};
+    int count{5};
     while(0<count--) {
         // sinfo("add(1, 4) = %d", client.add(1, 4));
         client.add(1, 10);
-        User u1{"Mpho", 29};
+        User u1;
+        u1.name = "Mpho";
+        u1.age  = 29;
         client.setUser(std::move(u1));
         u1 = client.getUser();
-        // sinfo("you said user is %s of %d yrs old", u1.name(), u1.age);
+        sinfo("you said user is %s of %d yrs old", u1.name(), u1.age);
     }
     sinfo("duration: %ld ms", mnow()-start);
 }
@@ -33,7 +35,7 @@ void startClient(Client& client)
 int main(int argc, char *argv[])
 {
     suil::init(opt(printinfo, false));
-    log::setup(opt(verbose, 2));
+    log::setup(opt(verbose, 1));
 
     sDemoServiceHandler sDemo;
     rpc::SuilRpcServer sServer(sDemo, opt(port, 4243));

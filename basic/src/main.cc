@@ -3,6 +3,7 @@
 #include <suil/config.h>
 #include <suil/http/endpoint.h>
 #include <suil/http/fserver.h>
+#include <suil/sql/pgsql.h>
 
 using namespace suil;
 
@@ -15,7 +16,7 @@ static void cmd_Run(cmdl::Parser& parser) {
                      'C', false, false};
     run([](cmdl::Cmd& cmd){
         // hand run command
-        String config = cmd.getvalue<String>("config", "res/app.lua").dup();
+        String config = cmd.getvalue<String>("config", "res/config.lua").dup();
         runServer(std::move(config));
     });
     parser.add(std::move(run));
@@ -59,7 +60,7 @@ int runServer(String&& configFile)
         return "Hello World";
     });
 
-    ep("/hello/<string>")
+    ep("/hello/{string}")
     ("GET"_method)
     ([](std::string name) {
         // return just a string saying hello world
@@ -88,7 +89,7 @@ int runServer(String&& configFile)
     });
 
     // <int> parameter via GET http://0.0.0.0:1080/api/check/integer
-    ep("/check/<int>")
+    ep("/check/{int}")
     ("GET"_method)
     ([](int num) {
         // demonstrates use of parameters and returning status codes
@@ -102,7 +103,7 @@ int runServer(String&& configFile)
     });
 
     // route parameters, e.g http://0.0.0.0:1080/api/add/3/1
-    ep("/add/<int>/<int>")
+    ep("/add/{int}/{int}")
     ("GET"_method)
     ([](const http::Request& req, http::Response& resp, int a, int b) {
         // demonstrates use of parameters and returning status codes

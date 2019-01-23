@@ -14,11 +14,14 @@ namespace suil {
 
     void DemoService::setUser(const User&& usr)
     {
-        //sinfo("Hello user: %s, you are %d yrs old", usr.name(), usr.age);
+        sinfo("Hello user: %s, you are %d yrs old", usr.name(), usr.age);
     }
 
     User DemoService::getUser()
     {
-        return User{"Carter", 29};
+        User u;
+        u.name  = "Carter";
+        u.age   = 29;
+        return std::move(u);
     }
 }

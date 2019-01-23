@@ -25,3 +25,5 @@ SuilApp(websock
         DEFINES   ${websock_DEFINES}
         INSTALL   ON
         INSTALL_DIRS res)
+
+file(COPY res DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
