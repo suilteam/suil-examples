@@ -29,5 +29,5 @@ namespace suil {
         void setUser(const User&& usr);
 
         User getUser();
-    } ;
+    };
 }
