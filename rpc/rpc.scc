@@ -1,33 +1,22 @@
 #include <suil/rpc/jsonrpc.h>
 #include <suil/rpc/suilrpc.h>
+#include "demo.h"
 
 /// Simple symbol for addition
 symbol(adder)
 
 namespace suil {
 
-    ///
-    /// User metadata
-    ///
-    meta User {
+    service [[rpc]] DemoService : DemoAttrs {
 
-        ///
-        /// The users name
-        ///
-        String name;
-
-        ///
-        /// The users age
-        ///
-        int    age;
-    };
-
-    service [[rpc]] DemoService {
+        DemoService();
 
         int add(int a, int b);
 
-        void setUser(const User&& usr);
+        void setUser(User&& usr);
 
         User getUser();
+
+        int getCalls();
     };
 }

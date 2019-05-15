@@ -22,13 +22,14 @@ SuilProject(jsonrpc
 
 set(jsonrpc_SOURCES
         src/main.cc
-        src/calculator.cpp)
+        src/calculator.cpp
+        src/types.scc.cpp)
 
 SuilApp(jsonrpc
         SOURCES         ${jsonrpc_SOURCES}
         VERSION         ${jsonrpc_VERSION}
         DEFINES         ${jsonrpc_DEFINES}
-        SCC_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/rpc.scc
+        SCC_SOURCES     ${CMAKE_CURRENT_SOURCE_DIR}/types.scc ${CMAKE_CURRENT_SOURCE_DIR}/rpc.scc
         SCC_OUTDIR      ${CMAKE_CURRENT_SOURCE_DIR}/src
         INSTALL         ON
         INSTALL_DIRS    res)

@@ -1,0 +1,20 @@
+#include <suil/zstring.h>
+
+namespace suil {
+
+    ///
+    /// User metadata
+    ///
+    meta User {
+
+        ///
+        /// The users name
+        ///
+        String name;
+
+        ///
+        /// The users age
+        ///
+        int age;
+    };
+}

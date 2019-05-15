@@ -7,21 +7,32 @@
 
 namespace suil {
 
+    DemoService::DemoService()
+    {
+        user.name = "Carter Mbotho";
+        user.age = 29;
+    }
+
     int DemoService::add(int a, int b)
     {
+        Ego.totalCalls++;
         return a + b;
     }
 
-    void DemoService::setUser(const User&& usr)
+    void DemoService::setUser(User&& usr)
     {
-        sinfo("Hello user: %s, you are %d yrs old", usr.name(), usr.age);
+        Ego.totalCalls++;
+        user = std::move(usr);
     }
 
     User DemoService::getUser()
     {
-        User u;
-        u.name  = "Carter";
-        u.age   = 29;
-        return std::move(u);
+        Ego.totalCalls++;
+        return Ego.user;
+    }
+
+    int DemoService::getCalls()
+    {
+        return Ego.totalCalls++;
     }
 }
