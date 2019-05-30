@@ -8,12 +8,12 @@ using namespace suil;
 int main(int argc, char *argv[])
 {
     suil::init(opt(printinfo, false));
-    log::setup(opt(verbose,0));
-    auto  proc  = Process::bash({{"FILE", "/etc/sysctl.conf"}}, "echo", "${FILE}");
+    log::setup(opt(verbose, 2));
+    auto  proc  = Process::bash({{"FILE", "/etc/sysctl.conf"}}, "cat", "${FILE}");
     auto  proc2 = Process::bash("tail", "-f", "/etc/sysctl.conf", "1>&2");
 
     proc->readAsync(var(onStdOutput) = [&](String &&output) {
-        swarn("{--1--} %.*s", output.size(), output());
+        swarn("{--1--} %s", output());
         return true;
     });
 
