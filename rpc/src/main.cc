@@ -18,7 +18,7 @@ void startClient(Client& client)
     client.connect("127.0.0.1", 4243);
     msleep(utils::after(2000));
     auto start = mnow();
-    int count{10};
+    int count{10000};
     while(0<count--) {
         // sinfo("add(1, 4) = %d", client.add(1, 4));
         client.add(1, 10);
@@ -27,7 +27,7 @@ void startClient(Client& client)
         u1.age  = count;
         client.setUser(std::move(u1));
         u1 = client.getUser();
-        sdebug("you said user is %s of %d yrs old", u1.name(), u1.age);
+        //sdebug("you said user is %s of %d yrs old", u1.name(), u1.age);
     }
     sinfo("duration: %ld ms, calls=%d", mnow()-start, client.getCalls());
 }

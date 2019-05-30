@@ -8,23 +8,21 @@ using namespace suil;
 int main(int argc, char *argv[])
 {
     suil::init(opt(printinfo, false));
-    log::setup(opt(verbose,2));
-    auto  proc  = Process::launch({{"FILE", "/var/log/syslog"}}, "tail", "-f", "/var/log/syslog");
-    auto  proc2 = Process::bash("tail", "-f", "/var/log/syslog", "1>&2");
+    log::setup(opt(verbose,0));
+    auto  proc  = Process::bash({{"FILE", "/etc/sysctl.conf"}}, "echo", "${FILE}");
+    auto  proc2 = Process::bash("tail", "-f", "/etc/sysctl.conf", "1>&2");
 
-    proc->readAsync(var(onStdOutput) =
-        [&](String &&output) {
-            swarn("{--1--} %s", output());
-            return true;
-        }
-    );
+    proc->readAsync(var(onStdOutput) = [&](String &&output) {
+        swarn("{--1--} %.*s", output.size(), output());
+        return true;
+    });
+
     proc2->readAsync(var(onStdError) = [&](String&& err) {
         serror("{--2--} %s", err());
         return true;
     });
 
-    proc->waitExit(10000);
-    proc->terminate();
-    proc2->waitExit();
+    proc2->waitExit(5000);
+    proc2->terminate();
     return EXIT_SUCCESS;
 }
