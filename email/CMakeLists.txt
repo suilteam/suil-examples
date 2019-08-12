@@ -22,5 +22,4 @@ SuilApp(email
         SOURCES   ${email_SOURCES}
         VERSION   ${email_VERSION}
         DEFINES   ${email_DEFINES}
-        INSTALL   ON
-        INSTALL_DIRS res)
+        INSTALL   ON)
