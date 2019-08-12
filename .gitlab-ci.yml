@@ -4,13 +4,17 @@ image: suilteam/suil-dev:latest
 # stub definition
 .job_def:
   before_script: &docker_hub_login
+    - export DOCKER_HOST=tcp://docker:2375/
     - docker login -u $SUILTEAM_DOCKERHUB_USER -p $SUILTEAM_DOCKERHUB_PASSWD
 
 # build examples job
 build:
   stage: build
   tags:
-    - alpine
+    - docker
+    - linux
+  services:
+    - docker:dind
   only:
     - master
 
