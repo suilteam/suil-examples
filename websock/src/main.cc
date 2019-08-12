@@ -33,6 +33,7 @@ int main(int argc, char *argv[])
         }
         // add as latest message
         history.push_front(he);
+        return history.front();
     };
 
     // We need to create a web socket API
@@ -56,10 +57,9 @@ int main(int argc, char *argv[])
             auto user = ws.data<User>();
             String msg = String{data.data(), data.size(), false};
             HistoryEntry he{user->username.peek(), msg};
-            auto entry = json::encode(he);
+            auto entry = appendHistory(json::encode(he));
             // send message to other connected clients
             ws.broadcast(entry.c_str(), entry.size(), http::WsOp::TEXT);
-            appendHistory(std::move(entry));
         },
 
         var(onClose) = [&](http::WebSock& ws) {
