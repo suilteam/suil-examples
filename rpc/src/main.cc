@@ -1,5 +1,6 @@
 #include <suil/cmdl.h>
 #include <suil/init.h>
+#include <suil/zmq/zmq.h>
 #include "rpc.scc.h"
 
 using namespace suil;
@@ -36,6 +37,7 @@ int main(int argc, char *argv[])
 {
     suil::init(opt(printinfo, false));
     log::setup(opt(verbose, 1));
+    suil::zmq::Message msg;
 
     sDemoServiceHandler sDemo;
     rpc::SuilRpcServer sServer(sDemo, opt(port, 4243));
