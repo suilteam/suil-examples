@@ -7,7 +7,7 @@ symbol(adder)
 
 namespace suil {
 
-    service [[rpc]] DemoService : DemoAttrs {
+    srvc [[rpc]] DemoService : DemoAttrs {
 
         DemoService();
 
