@@ -34,8 +34,7 @@ SuilApp(intkey
         VERSION   ${intkey_VERSION}
         DEFINES   ${intkey_DEFINES}
         INSTALL   ON
-        LIBRARIES sawtooth
-        INSTALL_DIRS res)
+        LIBRARIES sawtooth)
 
 file(GLOB intkey_TEST_SOURCES tests/*.cpp)
 SuilTest(intkey

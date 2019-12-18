@@ -40,8 +40,7 @@ SuilApp(zmqb
         VERSION      ${APP_VERSION}
         DEFINES      ${zmq_DEFINES}
         INSTALL      ON
-        SCC_SOURCES  ${zmq_SCC_SOURCES}
-        INSTALL_DIRS res)
+        SCC_SOURCES  ${zmq_SCC_SOURCES})
 
 file(GLOB zmq_TEST_SOURCES tests/*.cpp)
 SuilTest(zmqb
