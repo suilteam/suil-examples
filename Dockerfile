@@ -4,5 +4,6 @@ MAINTAINER "Carter Mbotho <carter@suilteam.com>"
 RUN adduser -s /bin/sh -h /home/build/ -D build
 # copy examples build folder
 COPY artifacts /home/build/examples
+ENV PATH="/home/build/examples/bin:${PATH}"
 
 WORKDIR /home/build
