@@ -27,7 +27,8 @@ SuilProject(intkey
 
 set(intkey_SOURCES
         src/main.cc
-        src/addresser.cpp)
+        src/addresser.cpp
+        src/tp.cpp)
 
 SuilApp(intkey
         SOURCES   ${intkey_SOURCES}
