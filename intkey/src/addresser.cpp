@@ -53,12 +53,12 @@ namespace suil::sawsdk::intkey {
 
     suil::String Addresser::mapKey(const suil::String &key, size_t pos, size_t count)
     {
-        return utils::SHA512(key).substr(pos, count);
+        return utils::SHA512(key).substr(pos, count, false);
     }
 
     suil::String Addresser::mapNamespace(const suil::String &ns) const
     {
-        return utils::SHA512(ns).substr(0, NAMESPACE_PREFIX_LENGTH);
+        return utils::SHA512(ns).substr(0, NAMESPACE_PREFIX_LENGTH, false);
     }
 
     const suil::String& Addresser::getNamespacePrefix() {

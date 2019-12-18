@@ -136,12 +136,13 @@ private:
 int main(int argc, char *argv[])
 {
     suil::init(opt(printinfo, false));
-    log::setup(opt(verbose, 4));
+    log::setup(opt(verbose, 0));
 
     try {
         sawsdk::TransactionHandler::UPtr handler(new IntKeyHandler);
         sawsdk::TransactionProcessor tp(URL_DEFAULT);
         tp.registerHandler(std::move(handler));
+        tp.run();
     }
     catch (...) {
         auto ex = Exception::fromCurrent();
