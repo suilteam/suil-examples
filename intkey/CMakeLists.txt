@@ -27,11 +27,21 @@ SuilProject(intkey
 
 set(intkey_SOURCES
         src/main.cc
-        src/addresser.cpp
         src/tp.cpp)
 
 SuilApp(intkey
         SOURCES   ${intkey_SOURCES}
+        VERSION   ${intkey_VERSION}
+        DEFINES   ${intkey_DEFINES}
+        INSTALL   ON
+        LIBRARIES sawtooth)
+
+set(intkeycli_SOURCES
+        src/cli/main.cpp
+        src/cli/app.cpp)
+include_directories("${CMAKE_BINARY_DIR}/suil/sawtooth")
+SuilApp(intkeycli
+        SOURCES   ${intkeycli_SOURCES}
         VERSION   ${intkey_VERSION}
         DEFINES   ${intkey_DEFINES}
         INSTALL   ON

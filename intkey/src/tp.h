@@ -7,53 +7,30 @@
 
 #include <suil/sawtooth/sdk.h>
 
-#include "addresser.h"
-
 namespace suil::sawsdk::intkey {
 
-define_log_tag(SAWSDK_INTKEY);
+    define_log_tag(SAWSDK_INTKEY);
 
-struct IntkeyTransactor : public sawsdk::Transactor, LOGGER(SAWSDK_INTKEY) {
+    struct IntKeyProcessor : public Processor, LOGGER(SAWSDK_INTKEY) {
+        using Processor::Processor;
 
-    IntkeyTransactor(sawsdk::intkey::Addresser& addresser, sawsdk::Transaction&& txn, sawsdk::GlobalState&& state);
+        void apply() override;
 
-    void apply() override;
+    public:
+        static const suil::String NAMESPACE;
 
-public:
-    static const suil::String NAMESPACE;
+    private:
+        void doSet(const suil::String& name, uint32_t value);
+        void doDec(const suil::String& name, uint32_t value);
+        void doInc(const suil::String& name, uint32_t value);
+    };
 
-private:
-    inline suil::String makeAddress(const suil::String& name) {
-        return mAddresser.makeAddress(name, 64, std::string::npos);
-    }
+    struct IntKeyHandler : public sawsdk::TransactionHandler, LOGGER(SAWSDK_INTKEY)
+    {
+        IntKeyHandler();
 
-    void doSet(const suil::String& name, uint32_t value);
-
-    void doDec(const suil::String& name, uint32_t value);
-
-    void doInc(const suil::String& name, uint32_t value);
-
-private:
-    sawsdk::intkey::Addresser& mAddresser;
-
-};
-
-struct IntKeyHandler : public sawsdk::TransactionHandler, LOGGER(SAWSDK_INTKEY) {
-
-    IntKeyHandler();
-
-    suil::String getFamilyName() const override;
-
-    std::vector<suil::String> getVersions() const override;
-
-    std::vector<suil::String> getNamespaces() const override;
-
-    sawsdk::Transactor::Ptr getTransactor(sawsdk::Transaction&& txn, sawsdk::GlobalState&& state) override;
-
-private:
-    sawsdk::intkey::Addresser mAddresser;
-    suil::String mNsPrefix;
-};
+        Processor::Ptr getProcessor(Transaction&& txn, GlobalState&& state) override;
+    };
 
 }
 
