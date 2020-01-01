@@ -32,8 +32,7 @@ SuilApp(sdk
         SOURCES   ${sdk_SOURCES}
         VERSION   ${sdk_VERSION}
         DEFINES   ${sdk_DEFINES}
-        INSTALL   ON
-        INSTALL_DIRS res)
+        INSTALL   ON)
 
 file(GLOB sdk_TEST_SOURCES tests/*.cpp)
 SuilTest(sdk
