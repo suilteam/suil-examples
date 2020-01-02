@@ -39,7 +39,7 @@ namespace suil::sawsdk::intkey {
         if (!state.empty()) {
             auto obj = json::Object::decode(state);
             auto value = (int32_t) obj(name());
-            sdebug("%s = %d", name(), value);
+            sinfo("%s = %d", name(), value);
         }
     }
 }
