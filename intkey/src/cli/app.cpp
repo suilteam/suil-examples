@@ -42,4 +42,34 @@ namespace suil::sawsdk::intkey {
             sinfo("%s = %d", name(), value);
         }
     }
+
+    void App::list()
+    {
+        auto states = Ego.getStates(Ego.getPrefix());
+        for (auto& state: states) {
+            auto obj = json::Object::decode(state);
+            for (auto& [key, val] : obj) {
+                auto str = (String) val;
+                sinfo("%s = %s", key, str());
+            }
+        }
+    }
+
+    void App::batch()
+    {
+        auto count = Ego.args.getvalue<uint32_t>("count", 10);
+        auto& Enc = Ego.encoder();
+        auto prefix = Ego.getPrefix();
+        std::vector<Client::Transaction> txns;
+        for (int i = 0; i < count; i++) {
+            json::Object jobj(json::Obj,
+                              "Verb",  "set",
+                              "Name",  utils::catstr("Key",i),
+                              "Value", 100+i);
+            auto str = json::encode(jobj);
+            txns.push_back(Enc(fromStdString(str), {prefix}, {prefix}));
+        }
+        auto batch = Enc(txns);
+        Ego.asyncBatches({batch});
+    }
 }

@@ -17,6 +17,8 @@ namespace suil::sawsdk::intkey {
         App(cmdl::Cmd& cmd);
         void modify(const suil::String& modify);
         void get();
+        void batch();
+        void list();
 
     private:
         cmdl::Cmd& args;

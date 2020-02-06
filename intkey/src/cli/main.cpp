@@ -13,42 +13,14 @@ static void cmdSet(cmdl::Parser& parser);
 static void cmdInc(cmdl::Parser& parser);
 static void cmdDec(cmdl::Parser& parser);
 static void cmdGet(cmdl::Parser& parser);
+static void cmdBatch(cmdl::Parser& parser);
+static void cmdList(cmdl::Parser& parser);
 
 int main(int argc, char *argv[])
 {
     suil::init(opt(printinfo, false));
-    Syslog sysLog;
-    log::setup(opt(verbose, 0), opt(sink, [&sysLog](const char *msg, size_t size, log::Level l){
-        switch (l) {
-            case log::Level::INFO:
-            case log::Level::NOTICE:
-                printf("%*s", (int)size, msg);
-                break;
-            case log::Level::ERROR:
-            case log::Level::CRITICAL:
-            case log::Level::WARNING:
-                fprintf(stderr, "error: %*s", (int)size, msg);
-                break;
-            case log::Level::DEBUG:
-            case log::Level::TRACE:
-                sysLog.log(msg, size, l);
-                break;
-            default:
-                break;
-        }
-    }), opt(format, [](char *out, log::Level l, const char *tag, const char *fmt, va_list args){
-        switch (l) {
-            case log::DEBUG:
-            case log::TRACE:
-                return log::Formatter()(out, l, tag, fmt, args);
-            default: {
-                int wr = vsnprintf(out, SUIL_LOG_BUFFER_SIZE, fmt, args);
-                out[wr++] = '\n';
-                out[wr]   = '\0';
-                return (size_t) wr;
-            }
-        }
-    }));
+    sawsdk::Client::Logger logger;
+    log::setup(opt(verbose, 0));
 
     cmdl::Parser parser(APP_NAME, APP_VERSION, "Application used to interact with suil's sawtooth IntKey TP");
     try {
@@ -63,6 +35,8 @@ int main(int argc, char *argv[])
         cmdInc(parser);
         cmdDec(parser);
         cmdGet(parser);
+        cmdBatch(parser);
+        cmdList(parser);
 
         parser.parse(argc, argv);
         parser.handle();
@@ -114,4 +88,26 @@ void cmdGet(cmdl::Parser& parser)
         app.get();
     });
     parser.add(std::move(get));
+}
+
+void cmdList(cmdl::Parser& parser)
+{
+    cmdl::Cmd list{"list", "List all the keys set on the int key TP"};
+    list([](cmdl::Cmd& cmd) {
+        sawsdk::intkey::App app(cmd);
+        app.list();
+    });
+    parser.add(std::move(list));
+}
+
+void cmdBatch(cmdl::Parser& parser)
+{
+    cmdl::Cmd batch{"batch", "Generate batch integer keys and send the batch to int key TP"};
+    batch << cmdl::Arg{"count", "The number of integer keys to generate (default = 10)",
+                       'C', false};
+    batch([](cmdl::Cmd& cmd) {
+        sawsdk::intkey::App app(cmd);
+        app.batch();
+    });
+    parser.add(std::move(batch));
 }
