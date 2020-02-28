@@ -3,7 +3,7 @@
 #include <suil/config.h>
 #include <suil/http/endpoint.h>
 #include <suil/http/fserver.h>
-#include <suil/sql/pgsql.h>
+#include <suil/http/middlewares.h>
 
 using namespace suil;
 
@@ -47,7 +47,7 @@ int runServer(String&& configFile)
     suil::init(opt(printinfo, false));
     log::setup(opt(verbose, config.get("config.verbosity", 1)));
     // create a new HTTP endpoint listening on port 80
-    http::TcpEndpoint<http::SystemAttrs> ep("/",
+    http::TcpEndpoint<http::SystemAttrs, http::mw::EndpointAdmin> ep("/",
             opt(name, config.get("config.http.host", std::string("0.0.0.0"))),
             opt(port, config.get("config.http.port", 1080)),
             opt(accept_backlog, 1000));
@@ -55,6 +55,7 @@ int runServer(String&& configFile)
     // accessed via http://0.0.0.0:1080/api/hello
     ep("/hello")
     ("GET"_method)
+    (Desc{"Return message hello world"})
     ([]() {
         // return just a string saying hello world
         return "Hello World";
@@ -67,7 +68,7 @@ int runServer(String&& configFile)
         return "Hello World " + name;
     });
 
-    // accessed via GET http://0.0.0.0:1080/api/hello
+    // accessed via GET http://0.0.0.0:1080/about
     ep("/about")
     ("GET"_method)
     ([]() {
@@ -105,6 +106,7 @@ int runServer(String&& configFile)
     // route parameters, e.g http://0.0.0.0:1080/api/add/3/1
     ep("/add/{int}/{int}")
     ("GET"_method)
+    (Desc{"Adds the given two values and returns results"})
     ([](const http::Request& req, http::Response& resp, int a, int b) {
         // demonstrates use of parameters and returning status codes
         sdebug("adding numbers a=%d, b=%d", a, b);
@@ -178,6 +180,8 @@ int runServer(String&& configFile)
             resp << "Welcome " << name << ", your email '" << email << "' is recognized :-)\n";
         }
     });
+
+    ep.middleware<http::mw::EndpointAdmin>().setup(ep);
 
     // we need to listen before creating workers
     ep.listen();

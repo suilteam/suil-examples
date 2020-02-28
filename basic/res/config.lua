@@ -7,7 +7,7 @@ config = {
     -- logging verbosity
     verbosity = 2,
     -- number of process to launch
-    nprocs    = 2,
+    nprocs    = 1,
     -- http configuration
     http = {
         host      = "0.0.0.0",
