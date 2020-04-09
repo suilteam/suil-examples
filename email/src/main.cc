@@ -9,10 +9,10 @@ int main(int argc, char *argv[])
     suil::init();
     log::setup(opt(verbose, 1));
 
-    SslMailOutbox outbox("smtp.gmail.com", 000, {"sender@gmail.com", "Sender Name"});
+    TcpMailOutbox outbox("localhost", 2525, {"sender@example.com", "Sender Name"});
 
-    if (outbox.login("sender@gmail.com", "password")) {
-        auto msg = outbox.draft("recepient@gmail.com", "Testing MailOutbux");
+    if (outbox.login("sender@example.com", "password")) {
+        auto msg = outbox.draft("recepient@example.com", "Testing MailOutbux");
         msg->body() << "Hello beautiful user";
         auto why = outbox.send(std::move(msg), 15000);
         if (why) {
