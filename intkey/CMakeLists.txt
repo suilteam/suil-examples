@@ -12,7 +12,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 set(intkey_VERSION        0.0.0 CACHE STRING     "Current application version")
 
-set(intkey_DEFINES -DAPI_VERSION=\"${intkey_VERSION}\")
+set(intkey_DEFINES -DAPI_VERSION=\"1.0\")
 
 if (SUIL_BUILD_DEV_PACKAGE)
     set(_SCC_BIN     ${CMAKE_BINARY_DIR}/tools/scc)

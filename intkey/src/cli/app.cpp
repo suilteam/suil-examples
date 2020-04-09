@@ -28,7 +28,7 @@ namespace suil::sawsdk::intkey {
                   "Name",  name,
                   "Value", value);
         auto str = json::encode(jobj);
-        auto prefix = Ego.getPrefix();
+        auto prefix = Ego.prefix();
         Ego.asyncBatches(fromStdString(str), {prefix}, {prefix});
     }
 
@@ -45,7 +45,7 @@ namespace suil::sawsdk::intkey {
 
     void App::list()
     {
-        auto states = Ego.getStates(Ego.getPrefix());
+        auto states = Ego.getStates(Ego.prefix());
         for (auto& state: states) {
             auto obj = json::Object::decode(state);
             for (auto& [key, val] : obj) {
@@ -59,7 +59,7 @@ namespace suil::sawsdk::intkey {
     {
         auto count = Ego.args.getvalue<uint32_t>("count", 10);
         auto& Enc = Ego.encoder();
-        auto prefix = Ego.getPrefix();
+        auto prefix = Ego.prefix();
         std::vector<Client::Transaction> txns;
         for (int i = 0; i < count; i++) {
             json::Object jobj(json::Obj,

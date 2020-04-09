@@ -17,19 +17,15 @@ namespace suil::sawsdk::intkey {
         void apply() override;
 
     public:
-        static const suil::String NAMESPACE;
+        static const String NAMESPACE;
 
     private:
-        void doSet(const suil::String& name, uint32_t value);
-        void doDec(const suil::String& name, uint32_t value);
-        void doInc(const suil::String& name, uint32_t value);
-    };
+        void doSet(const String& name, uint32_t value);
+        void doDec(const String& name, uint32_t value);
+        void doInc(const String& name, uint32_t value);
 
-    struct IntKeyHandler : public sawsdk::TransactionHandler, LOGGER(SAWSDK_INTKEY)
-    {
-        IntKeyHandler();
-
-        Processor::Ptr getProcessor(Transaction&& txn, GlobalState&& state) override;
+    private:
+        AddressEncoder mkAddr{NAMESPACE};
     };
 
 }

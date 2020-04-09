@@ -9,6 +9,7 @@
 
 using namespace suil;
 
+
 static void startTransactionProcessor(suil::String&& endpont);
 
 static void cmd_Start(cmdl::Parser& parser) {
@@ -47,12 +48,16 @@ int main(int argc, char *argv[])
     return EXIT_SUCCESS;
 }
 
+using sawsdk::intkey::IntKeyProcessor;
+
 void startTransactionProcessor(suil::String&& endpont)
 {
     try {
-        sawsdk::TransactionHandler::UPtr handler(new sawsdk::intkey::IntKeyHandler);
         sawsdk::TransactionProcessor tp(std::move(endpont));
-        tp.registerHandler(std::move(handler));
+        auto& ik = tp.registerFamily<IntKeyProcessor>(
+                IntKeyProcessor::NAMESPACE, IntKeyProcessor::NAMESPACE);
+        ik.versions().push_back(String{API_VERSION});
+
         tp.run();
     }
     catch (...) {

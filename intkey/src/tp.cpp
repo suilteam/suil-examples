@@ -70,7 +70,7 @@ namespace suil::sawsdk::intkey {
 
     void IntKeyProcessor::doSet(const suil::String& name, uint32_t value)
     {
-        auto addr = Ego.makeAddress(name);
+        auto addr = Ego.mkAddr(name);
         idebug("Intkey::Transactor set {name: %s, address: %s, value: %u}", name(), addr(), value);
 
         auto state = Ego.mState.getState(addr);
@@ -92,7 +92,7 @@ namespace suil::sawsdk::intkey {
 
     void IntKeyProcessor::doDec(const suil::String& name, uint32_t value)
     {
-        auto addr = Ego.makeAddress(name);
+        auto addr = mkAddr(name);
         idebug("Intkey::Transactor decrement {name: %s, address: %s, value: %u}", name(), addr(), value);
 
         json::Object obj;
@@ -122,7 +122,7 @@ namespace suil::sawsdk::intkey {
 
     void IntKeyProcessor::doInc(const suil::String& name, uint32_t value)
     {
-        auto addr = Ego.makeAddress(name);
+        auto addr = Ego.mkAddr(name);
         idebug("Intkey::Transactor increment {name: %s, address: %s, value: %u}", name(), addr(), value);
 
         json::Object obj;
@@ -149,16 +149,4 @@ namespace suil::sawsdk::intkey {
         auto str = json::encode(obj);
         Ego.mState.setState(addr, sawsdk::fromStdString(str));
     }
-
-    IntKeyHandler::IntKeyHandler()
-        : TransactionHandler(IntKeyProcessor::NAMESPACE, IntKeyProcessor::NAMESPACE)
-    {
-        Ego.getVersions().push_back(String{"1.0"}.dup());
-    }
-
-    Processor::Ptr IntKeyHandler::getProcessor(Transaction&& txn, GlobalState&& state)
-    {
-        return sawsdk::Processor::Ptr(new IntKeyProcessor(mAddressEcoder, std::move(txn), std::move(state)));
-    }
-
 }
